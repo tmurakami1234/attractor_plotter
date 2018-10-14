@@ -1,12 +1,9 @@
 import tkinter, sys
-#import matplotlib
-#matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-import numpy as np
-import matplotlib.pyplot as plt
-#import matplotlib.gridspec as gridspec
 from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
 import argparse
 
 def parse_arguments():
@@ -108,20 +105,16 @@ def plot_image(n):
     ax1.legend(loc='upper right')
     ax2.set_xlabel("x")
     ax2.set_ylabel("y")
-    a=11
-    ax2.set_zlabel(f"$z_{12}${a}")
+    ax2.set_zlabel(f"z")
     ax2.plot(x_list, y_list, z_list, linewidth=0.75)
     canvas.draw()
-    #If this code is used instead of the following code, root frame would freeze.
-    #plt.pause(0.01)
 
 def set_widget(frame, row, column, resolution, variable_range, entry_label, variable_initial, variable_type = 'int'):
     variable = tkinter.IntVar() if variable_type == 'int' else tkinter.DoubleVar()
     variable.set(variable_initial)
     variable_label = tkinter.Label(frame, text=entry_label)
     variable_entry = tkinter.Entry(frame, width = 5)
-    variable_scale = tkinter.Scale(frame, #label = entry_label,
-                                   from_ = variable_range[0], to = variable_range[1],
+    variable_scale = tkinter.Scale(frame, from_ = variable_range[0], to = variable_range[1],
                                    resolution = resolution, orient = "h",
                                    tickinterval = (variable_range[0]-variable_range[1])/5.0,
                                    length = 300, variable = variable,
@@ -168,9 +161,6 @@ if __name__=="__main__":
     frame1 = tkinter.Frame(root)
     frame2 = tkinter.Frame(root)
     
-    #frame2.columnconfigure(1)
-    #frame2.rowconfigure(5)
-    
     fig = Figure(figsize=(12,5))
     canvas = FigureCanvasTkAgg(fig, master=frame1)
     canvas.get_tk_widget().grid(row=5, column=0)
@@ -190,7 +180,9 @@ if __name__=="__main__":
     variable1, variable1_entry, variable1_scale = set_widget(frame2,5,0,0.01,[-50,50],'initial x',args.init_var[0], 'double')
     variable2, variable2_entry, variable2_scale = set_widget(frame2,6,0,0.01,[-50,50],'initial y',args.init_var[1], 'double')
     variable3, variable3_entry, variable3_scale = set_widget(frame2,7,0,0.01,[-50,50],'initial z',args.init_var[2], 'double')
-    
+
+    plot_image(0)
+
     sys.setrecursionlimit(10000)
     
     frame2.grid(row=0, column=0, pady=10, padx=10)

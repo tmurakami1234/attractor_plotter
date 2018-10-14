@@ -6,4 +6,5 @@
 次のコマンドでプログラムを起動します.
 ```bash
 $ python3 attractor_plotter.py
+```
 ubuntu 18.04 bionic x86_64 では起動確認済みです

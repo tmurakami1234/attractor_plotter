@@ -4,7 +4,18 @@
 ![](https://pbs.twimg.com/media/DpfqemtU4AAMKuu.png:large)
 
 次のコマンドでプログラムを起動します.
+
 ```bash
 $ python3 attractor_plotter.py
 ```
-ubuntu 18.04 bionic x86_64 では起動確認済みです
+ubuntu 18.04 bionic x86_64 では起動確認済みです.
+
+## 仕様
+* scale bar で設定されてる値のグラフをプロットします.
+* `keep=>` をクリックすることで, scale bar で設定している値を entry box に記録出来ます.
+* `set<=` をクリックすると, entry box の値が scale bar に反映されます.
+
+## 課題
+* ソースを書き換えずに, 指定された方程式の数値計算結果がプロットされるようにしたい.
+* グラフを保存出来るボタンをつける.
+* 好きな変数を軸に指定してグラフを描けるようにUIを変更したい.

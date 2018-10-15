@@ -109,6 +109,16 @@ def plot_image(n):
     ax2.plot(x_list, y_list, z_list, linewidth=0.75)
     canvas.draw()
 
+def save_image():
+    figure_name = save_image_name_entry.get()
+    message.lower(membrane)
+    if figure_name == '':
+        message.lift(membrane)
+        return
+    extension = 'png'
+    figure_name += '.'+extension if figure_name.split('.')[-1] != extension else ''
+    fig.savefig(figure_name)
+    
 def set_widget(frame, row, column, resolution, variable_range, entry_label, variable_initial, variable_type = 'int'):
     variable = tkinter.IntVar() if variable_type == 'int' else tkinter.DoubleVar()
     variable.set(variable_initial)
@@ -160,12 +170,25 @@ if __name__=="__main__":
     root.title("Sample")
     frame1 = tkinter.Frame(root)
     frame2 = tkinter.Frame(root)
+    frame3 = tkinter.Frame(frame1, width=1200, height=50)
+    membrane = tkinter.Label(frame3, width=1200, height=50)
+    membrane.place(x=0, y=0)
     
     fig = Figure(figsize=(12,5))
     canvas = FigureCanvasTkAgg(fig, master=frame1)
-    canvas.get_tk_widget().grid(row=5, column=0)
+    canvas.get_tk_widget().pack()
     ax1 = fig.add_subplot(121)
     ax2 = fig.add_subplot(122,projection = "3d")
+
+    save_image_button = tkinter.Button(frame3, text="save", width=5, command=save_image)
+    save_image_name_entry = tkinter.Entry(frame3, width = 50)
+    save_image_name_entry.insert(tkinter.END, "attractor_plotter.png")
+    message = tkinter.Label(frame3, text="entry box is empty!", fg='red')
+    save_image_name_entry.place(x=200, y=10, width=500, height=30)
+    save_image_button.place(x=710, y=10, width=80, height=30)
+    message.place(x=800, y=10, width=150, height=30)
+    message.lower(membrane)
+    frame3.pack(pady=10)
     
     set_parameter_button = tkinter.Button(frame2, text="set <=", width=5, command=set_parameter)
     keep_parameter_button = tkinter.Button(frame2, text="keep =>", width=5, command=keep_parameter)   

@@ -1,10 +1,11 @@
-import tkinter, sys
+import tkinter, sys, os
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import argparse
+from pathlib import Path
 
 def parse_arguments():
     lorenz_attractor = [10.,28.,8./3]
@@ -17,8 +18,15 @@ def parse_arguments():
     parser.add_argument('--step-width', type=float, default=0.005, metavar='FLOAT', help='')
     parser.add_argument('--start-time', type=float, default=0., metavar='FLOAT', help='')
     parser.add_argument('--end-time', type=float, default=100., metavar='FLOAT', help='')
+    parser.add_argument('--output', type=this_is_dir, default='.', metavar='OUTPUT/DIR/PATH', help='')
     args = parser.parse_args()
+    args.output=Path(args.output)
     return args
+
+def this_is_dir(dir_path):
+    if not os.path.isdir(dir_path):
+        raise argparse.ArgumentTypeError(f"{dir_path} dose not exist.")
+    return dir_path
 
 def derivative_of_x_wrt_t(variables, time, parameters):
     p = parameters[:]
@@ -116,8 +124,14 @@ def save_image():
         message.lift(membrane)
         return
     extension = 'png'
-    figure_name += '.'+extension if figure_name.split('.')[-1] != extension else ''
-    fig.savefig(figure_name)
+    figure_name = ('.'.join(figure_name.split('.')[0:-1])
+                   if figure_name.split('.')[-1] == extension else figure_name)
+    num = 2
+    file_name = figure_name+'.'+extension
+    while os.path.isfile(args.output/file_name):
+        file_name = figure_name+f"({num})."+extension
+        num += 1
+    fig.savefig(file_name)
     
 def set_widget(frame, row, column, resolution, variable_range, entry_label, variable_initial, variable_type = 'int'):
     variable = tkinter.IntVar() if variable_type == 'int' else tkinter.DoubleVar()
@@ -167,7 +181,7 @@ if __name__=="__main__":
     args = parse_arguments()
     
     root = tkinter.Tk()
-    root.title("Sample")
+    root.title("Attractor plotter")
     frame1 = tkinter.Frame(root)
     frame2 = tkinter.Frame(root)
     frame3 = tkinter.Frame(frame1, width=1200, height=50)
